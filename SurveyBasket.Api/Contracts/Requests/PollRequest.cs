@@ -1,8 +1,7 @@
 ﻿using System;
-namespace SurveyBasket.Api.Contracts.Responses
+namespace SurveyBasket.Api.Contracts.Requests
 {
-	public record PollResponse(
-        int Id,
+	public record PollRequest(
         string Title,
         string Summary,
         bool IsPublished,

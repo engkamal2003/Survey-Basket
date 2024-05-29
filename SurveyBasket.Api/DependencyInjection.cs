@@ -1,10 +1,20 @@
-﻿namespace SurveyBasket.Api
+﻿using SurveyBasket.Api.Persistence;
+
+namespace SurveyBasket.Api
 {
 	public static class DependencyInjection
 	{
-		public static IServiceCollection AddDependecies(this IServiceCollection services)
+		public static IServiceCollection AddDependecies(this IServiceCollection services,
+            IConfiguration configuration)
 		{
             services.AddControllers();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ??
+                  throw new InvalidOperationException("Connection string 'DefaultConnection' Not found.");
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                       options.UseSqlServer(connectionString));
+
             services
                 .AddSwaggerServices()
                 .AddMapsterConf()
