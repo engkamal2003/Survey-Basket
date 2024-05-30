@@ -1,4 +1,8 @@
-﻿using SurveyBasket.Api.Persistence;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SurveyBasket.Api.Authentication;
+using SurveyBasket.Api.Persistence;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SurveyBasket.Api
 {
@@ -8,7 +12,7 @@ namespace SurveyBasket.Api
             IConfiguration configuration)
 		{
             services.AddControllers();
-
+            services.AddAuthConfig();
             var connectionString = configuration.GetConnectionString("DefaultConnection") ??
                   throw new InvalidOperationException("Connection string 'DefaultConnection' Not found.");
 
@@ -17,13 +21,14 @@ namespace SurveyBasket.Api
 
             services
                 .AddSwaggerServices()
-                .AddMapsterConf()
-                .AddFluentValidationConf();
+                .AddMapsterConfig()
+                .AddFluentValidationConfig();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPollService, PollService>();
             return services;
 		}
 
-        public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
+        private static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
@@ -32,7 +37,7 @@ namespace SurveyBasket.Api
             return services;
         }
 
-        public static IServiceCollection AddMapsterConf(this IServiceCollection services)
+        private static IServiceCollection AddMapsterConfig(this IServiceCollection services)
         {
             var mappingConfig = TypeAdapterConfig.GlobalSettings;
             mappingConfig.Scan(Assembly.GetExecutingAssembly());
@@ -40,11 +45,41 @@ namespace SurveyBasket.Api
             return services;
         }
 
-        public static IServiceCollection AddFluentValidationConf(this IServiceCollection services)
+        private static IServiceCollection AddFluentValidationConfig(this IServiceCollection services)
         {
             services
                 .AddFluentValidationAutoValidation()
                 .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            return services;
+        }
+
+        private static IServiceCollection AddAuthConfig(this IServiceCollection services)
+        {
+            services.AddSingleton<IJwtProvider, JwtProvider>();
+            services
+                .AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(o =>
+                {
+                    o.SaveToken = true;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7MfAb4WcAIMkkigVtIepIILOVJEjAcB")),
+                        ValidIssuer = "SurveyBasketApp",
+                        ValidAudience = "SurveyBasketApp users"
+                    };
+                });
+
             return services;
         }
     }

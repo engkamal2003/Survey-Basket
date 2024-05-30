@@ -21,28 +21,30 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.19" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Services\" />
     <None Remove="Contracts\" />
-    <None Remove="Contracts\Requests\" />
-    <None Remove="Contracts\Responses\" />
     <None Remove="Mapping\" />
-    <None Remove="Contracts\Validations\" />
     <None Remove="Persistence\" />
     <None Remove="Entities\" />
     <None Remove="Persistence\EntitiesConfigurations\" />
+    <None Remove="Contracts\Polls\" />
+    <None Remove="Contracts\Authentication\" />
+    <None Remove="Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Contracts\" />
-    <Folder Include="Contracts\Requests\" />
-    <Folder Include="Contracts\Responses\" />
     <Folder Include="Mapping\" />
-    <Folder Include="Contracts\Validations\" />
     <Folder Include="Persistence\" />
     <Folder Include="Entities\" />
     <Folder Include="Persistence\EntitiesConfigurations\" />
+    <Folder Include="Contracts\Polls\" />
+    <Folder Include="Contracts\Authentication\" />
+    <Folder Include="Authentication\" />
   </ItemGroup>
 </Project>

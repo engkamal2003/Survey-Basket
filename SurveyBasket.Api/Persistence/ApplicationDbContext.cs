@@ -21,15 +21,9 @@
 //}
 
 
-
-using Microsoft.EntityFrameworkCore;
-using SurveyBasket.Api.Entities;
-using SurveyBasket.Api.Persistence.EntitiesConfigurations;
-using System.Reflection;
-
 namespace SurveyBasket.Api.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
