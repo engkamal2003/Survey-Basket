@@ -12,7 +12,7 @@ namespace SurveyBasket.Api
             IConfiguration configuration)
 		{
             services.AddControllers();
-            services.AddAuthConfig();
+            services.AddAuthConfig(configuration);
             var connectionString = configuration.GetConnectionString("DefaultConnection") ??
                   throw new InvalidOperationException("Connection string 'DefaultConnection' Not found.");
 
@@ -53,12 +53,21 @@ namespace SurveyBasket.Api
             return services;
         }
 
-        private static IServiceCollection AddAuthConfig(this IServiceCollection services)
+        private static IServiceCollection AddAuthConfig(this IServiceCollection services,
+            IConfiguration configuration)
         {
-            services.AddSingleton<IJwtProvider, JwtProvider>();
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddSingleton<IJwtProvider, JwtProvider>();
+            //services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+            services.AddOptions<JwtOptions>()
+                .BindConfiguration(JwtOptions.SectionName)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            var jwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
 
             services.AddAuthentication(options =>
             {
@@ -74,9 +83,9 @@ namespace SurveyBasket.Api
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J7MfAb4WcAIMkkigVtIepIILOVJEjAcB")),
-                        ValidIssuer = "SurveyBasketApp",
-                        ValidAudience = "SurveyBasketApp users"
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key!)),
+                        ValidIssuer = jwtSettings?.Issuer,
+                        ValidAudience = jwtSettings?.Audience
                     };
                 });
 

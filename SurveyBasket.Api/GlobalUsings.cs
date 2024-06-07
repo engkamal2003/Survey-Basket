@@ -19,3 +19,4 @@ global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using SurveyBasket.Api.Contracts.Authentication;
 global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.Extensions.Options;
