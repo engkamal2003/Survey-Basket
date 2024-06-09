@@ -1,6 +1,4 @@
-﻿using SurveyBasket.Api.Entities;
-
-namespace SurveyBasket.Api.Services
+﻿namespace SurveyBasket.Api.Services
 {
     public class PollService : IPollService
     {
