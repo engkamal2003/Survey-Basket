@@ -12,6 +12,16 @@ namespace SurveyBasket.Api
             IConfiguration configuration)
 		{
             services.AddControllers();
+
+
+            services.AddCors(options =>
+                    options.AddDefaultPolicy(builder =>
+                       builder
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .WithOrigins(configuration.GetSection("ALLowedOrigins").Get<string[]>()!)
+                            )
+            );
             services.AddAuthConfig(configuration);
             var connectionString = configuration.GetConnectionString("DefaultConnection") ??
                   throw new InvalidOperationException("Connection string 'DefaultConnection' Not found.");
