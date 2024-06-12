@@ -3,6 +3,7 @@ using SurveyBasket.Api.Authentication;
 using SurveyBasket.Api.Persistence;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SurveyBasket.Services;
 
 namespace SurveyBasket.Api
 {

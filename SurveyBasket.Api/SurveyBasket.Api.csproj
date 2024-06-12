@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
+    <PackageReference Include="OneOf" Version="3.0.271" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,8 @@
     <None Remove="Contracts\Polls\" />
     <None Remove="Contracts\Authentication\" />
     <None Remove="Authentication\" />
+    <None Remove="Abstractions\" />
+    <None Remove="Errors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -47,5 +50,7 @@
     <Folder Include="Contracts\Polls\" />
     <Folder Include="Contracts\Authentication\" />
     <Folder Include="Authentication\" />
+    <Folder Include="Abstractions\" />
+    <Folder Include="Errors\" />
   </ItemGroup>
 </Project>
